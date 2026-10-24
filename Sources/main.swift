@@ -133,7 +133,7 @@ func notifyNewCampaigns(_ fresh: [Campaign]) {
 
 
 func parseStamp(_ text: String) -> Date? {
-    // 服务端给的是 2026-11-15T02:04:26.576304Z，截到秒再解析
+    // 服务端给的是带微秒的 ISO 串，截到秒再解析
     let head = String(text.prefix(19)) + "Z"
     return stampFormat.date(from: head)
 }
