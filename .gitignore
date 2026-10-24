@@ -1,0 +1,14 @@
+node_modules/
+.venv/
+__pycache__/
+*.log
+最新状态.txt
+今日状态.json
+积分盘查.json
+活动提醒.json
+领积分台账.jsonl
+.唤出图标
+.deepseek-key
+.run.lock
+build/
+.DS_Store
