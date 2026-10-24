@@ -1056,8 +1056,15 @@ def inventory_zcode():
 
 
 DEEPSEEK_KEY_FILE = BASE_DIR / ".deepseek-key"
-# 官方 /user/balance 不给有效期，这行是你 2026-10-24 从 DeepSeek 后台抄来的赠送余额到期时间
-DEEPSEEK_GRANTED_EXPIRES = "2026-10-27 18:49:08"
+# 官方 /user/balance 不给有效期；这份文件里填你在后台看到的到期时间，没有就如实写"接口未提供有效期"
+DEEPSEEK_EXPIRES_FILE = BASE_DIR / ".deepseek-expires"
+
+
+def deepseek_granted_expires():
+    try:
+        return DEEPSEEK_EXPIRES_FILE.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
 
 
 def inventory_deepseek():
@@ -1094,11 +1101,12 @@ def inventory_deepseek():
     info = next((i for i in infos if i.get("currency") == "CNY"), infos[0])
     total = num(info.get("total_balance"))
     unit = "元" if info.get("currency") == "CNY" else (info.get("currency") or "")
+    granted_expires = deepseek_granted_expires()
     inventory_add("deepseek", "DeepSeek", "/Applications/DeepSeek Harness.app",
                   unit=unit, total=total, remaining=total,
                   purchased=num(info.get("topped_up_balance")),
                   gifted=num(info.get("granted_balance")), used=0, quota_known=False,
-                  expires=f"赠送到 {_cn_date(DEEPSEEK_GRANTED_EXPIRES)}",
+                  expires=f"赠送到 {_cn_date(granted_expires)}" if granted_expires else "接口未提供有效期",
                   note=f"充值 {info.get('topped_up_balance')} · "
                        f"赠送 {info.get('granted_balance')}（{info.get('currency')}）")
 

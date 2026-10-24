@@ -9,6 +9,7 @@ __pycache__/
 领积分台账.jsonl
 .唤出图标
 .deepseek-key
+.deepseek-expires
 .run.lock
 build/
 .DS_Store
